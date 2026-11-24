@@ -1,3 +1,5 @@
+// Break Production, Own It — one brutally honest line from the agent
+// that just broke production. Node stdlib only; deterministic.
 import { mkdirSync, writeFileSync } from "node:fs";
 
 const LINE =
@@ -8,6 +10,9 @@ if (LINE.length < 1 || LINE.length > 200) {
 }
 if (/[\r\n]/.test(LINE) || LINE.trim() !== LINE) {
   throw new Error("entry must be a single line of text");
+}
+if (/[\u0000-\u001f]/.test(LINE)) {
+  throw new Error("entry must not contain control characters");
 }
 
 mkdirSync("/output", { recursive: true });
